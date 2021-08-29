@@ -9,10 +9,9 @@ interface User {
 }
 
 interface signInCredentials {
-    email: string;
+    email?: string;
     password?: string;
-    googleId?: string;
-    name?: string;
+    code?: string;
 }
 
 interface AuthState {
@@ -41,12 +40,10 @@ const AuthProvider: React.FC = ({ children }) => {
         return {} as AuthState;
     });
 
-    const signIn = useCallback(async ({ name, email, password, googleId }) => {
-        if (googleId) {
+    const signIn = useCallback(async ({ email, password, code }) => {
+        if (code) {
             const response = await api.post('sessions/auth/google', {
-                googleId,
-                name,
-                email,
+                code,
             });
             const { token, user } = response.data;
             localStorage.setItem('@aiLouise:token', token);
@@ -82,7 +79,7 @@ const AuthProvider: React.FC = ({ children }) => {
                 user,
             });
         },
-        [setData, data.token],
+        [setData, data.token]
     );
 
     return (

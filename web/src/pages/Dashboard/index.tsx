@@ -113,7 +113,7 @@ const Dashboard: React.FC = () => {
 
     const nextAppointment = useMemo(() => {
         return appointments.find((appointment) =>
-            isAfter(parseISO(appointment.date), new Date()),
+            isAfter(parseISO(appointment.date), new Date())
         );
     }, [appointments]);
 

@@ -13,28 +13,37 @@ const GoogleButtonLogin: React.FC = () => {
     const { signIn } = useAuth();
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const responseGoogleSuccess = async (
-        response: GoogleLoginResponse | GoogleLoginResponseOffline,
+        response: GoogleLoginResponse | GoogleLoginResponseOffline
     ) => {
-        try {
-            if ('googleId' in response) {
-                const profile = response.getBasicProfile();
-                signIn({
-                    googleId: profile.getId(),
-                    name: profile.getName(),
-                    email: profile.getEmail(),
+        if ('code' in response) {
+            // const profile = response.getBasicProfile();
+            // const { accessToken } = response;
+            const googleCode = response.code;
+
+            try {
+                await signIn({
+                    code: googleCode,
                 });
+
                 addToast({
                     type: 'success',
                     title: 'Authentication Success',
                     description: 'Now you are logged in',
                 });
+            } catch (err) {
+                if (err instanceof Error) {
+                    addToast({
+                        type: 'error',
+                        title: 'Authentication failed',
+                        description: 'Internal Error',
+                    });
+                }
+                addToast({
+                    type: err.response.data.status,
+                    title: 'Authentication Failed',
+                    description: err.response.data.message,
+                });
             }
-        } catch (err) {
-            addToast({
-                type: 'error',
-                title: 'Something bad happened',
-                description: 'No worry! Try again.',
-            });
         }
     };
 
@@ -44,9 +53,13 @@ const GoogleButtonLogin: React.FC = () => {
             <ButtonContainer>
                 <p>Or keep with: </p>
                 <GoogleLogin
-                    clientId="451143107038-28dgglhc7rftcsefci8djuvk1hpfk5ll.apps.googleusercontent.com"
+                    clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ''}
                     buttonText="Continue with Google"
                     onSuccess={responseGoogleSuccess}
+                    cookiePolicy="single_host_origin"
+                    scope="https://www.googleapis.com/auth/calendar"
+                    accessType="offline"
+                    responseType="code"
                 />
             </ButtonContainer>
         </Container>

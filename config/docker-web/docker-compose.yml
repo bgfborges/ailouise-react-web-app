@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  ailouiseweb:
+    build: 
+      context: ../../web
+      dockerfile: ../config/docker-web/Dockerfile
+    container_name: "${PROJECT_NAME}_project"
+    ports:
+      - "${PROJECT_PORT}:3000"
+    command: serve -s -p 3000 ./build
+    restart: always
+    volumes:
+      - ../../web/build:/usr/app/build
+      - ../../web/node_modules:/usr/app/node_modules

@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  ailouiseweb:
+    build: .
+    container_name: "${PROJECT_NAME}_project"
+    ports:
+      - "${PROJECT_PORT}:3000"
+    command: yarn start
+    restart: always
+    volumes:
+      - ./build:/usr/app/build

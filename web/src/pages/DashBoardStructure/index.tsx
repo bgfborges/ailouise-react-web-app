@@ -39,7 +39,7 @@ const DashBoardStructure: React.FC = ({ children }) => {
                 document.body.removeEventListener('click', setMenuOff, true);
             }
         },
-        [menuWrapper],
+        [menuWrapper]
     );
 
     useEffect(() => {

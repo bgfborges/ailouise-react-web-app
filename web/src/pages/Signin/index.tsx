@@ -1,70 +1,72 @@
 import React, { useCallback, useRef } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { IoMdMail, IoMdLock, IoMdPerson } from 'react-icons/io';
+import { Link } from 'react-router-dom';
+import { IoMdMail, IoMdLock } from 'react-icons/io';
 import { Form } from '@unform/web';
-import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
-import api from '../../services/api';
-import { Container, Content, Background, AnimatedContent } from './styles';
+import * as Yup from 'yup';
 import getValidationErrors from '../../utils/getValidationErrors';
+import { Container, Content, Background, AnimatedContent } from './styles';
 import logoImg from '../../assets/ailouise.png';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import GoogleButtonLogin from '../../components/GoogleLogin';
+import { useAuth } from '../../hooks/auth';
 import { useToast } from '../../hooks/toast';
 
-interface SignUpFormData {
-    name: string;
+interface signInFormData {
     email: string;
     password: string;
 }
 
-const Signup: React.FC = () => {
+const SignIn: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
+    const { signIn } = useAuth();
     const { addToast } = useToast();
-    const history = useHistory();
     // eslint-disable-next-line @typescript-eslint/ban-types
     const handleSubmit = useCallback(
-        async (data: SignUpFormData) => {
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        async (data: signInFormData) => {
             formRef.current?.setErrors({});
             try {
                 const schema = Yup.object().shape({
-                    name: Yup.string().required('Name is Required'),
                     email: Yup.string()
                         .required('Email is Required')
                         .email('Write a valid e-mail'),
-                    password: Yup.string().min(6, 'Minimun 6 characters'),
+                    password: Yup.string().required('Password is Required'),
                 });
                 await schema.validate(data, {
                     abortEarly: false,
                 });
-
-                api.post('/users', data);
-
-                history.push('/');
+                await signIn({
+                    email: data.email,
+                    password: data.password,
+                });
 
                 addToast({
                     type: 'success',
-                    title: 'Success',
-                    description: 'Now you are part of our community',
+                    title: 'Authentication Success',
+                    description: 'Now you are logged in',
                 });
             } catch (err) {
-                const errors = getValidationErrors(err);
-                formRef.current?.setErrors(errors);
+                if (err instanceof Yup.ValidationError) {
+                    const errors = getValidationErrors(err);
+                    formRef.current?.setErrors(errors);
+                }
 
                 addToast({
                     type: 'error',
-                    title: 'SignUp Error',
-                    description: 'There was some error on SignUp',
+                    title: 'Authentication Error',
+                    description: 'Check Email/password conbination',
                 });
+
+                // Send a toast
             }
         },
-        [addToast, history],
+        [signIn, addToast]
     );
 
     return (
         <Container>
-            <Background />
             <Content>
                 <AnimatedContent>
                     <img
@@ -72,12 +74,7 @@ const Signup: React.FC = () => {
                         alt="Logo aiLouise Marketing e Tecnologia"
                     />
                     <Form ref={formRef} onSubmit={handleSubmit}>
-                        <h1>Create a new account</h1>
-                        <Input
-                            name="name"
-                            icon={IoMdPerson}
-                            placeholder="Name"
-                        />
+                        <h1>Login into your account</h1>
                         <Input
                             name="email"
                             icon={IoMdMail}
@@ -89,16 +86,22 @@ const Signup: React.FC = () => {
                             type="password"
                             placeholder="Password"
                         />
-                        <Button type="submit">CREATE</Button>
-                        <Link to="/">
-                            Already have an account? <span>Login</span>
+                        <span>
+                            <Link to="/forgot-password">
+                                Forgot my password
+                            </Link>
+                        </span>
+                        <Button type="submit">GO NOW!</Button>
+                        <Link to="/signup">
+                            Don't have an account? <span>Register</span>
                         </Link>
                         <GoogleButtonLogin />
                     </Form>
                 </AnimatedContent>
             </Content>
+            <Background />
         </Container>
     );
 };
 
-export default Signup;
+export default SignIn;

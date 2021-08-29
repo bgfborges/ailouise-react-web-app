@@ -41,13 +41,13 @@ const Profile: React.FC = () => {
                         is: (val: string | undefined) =>
                             val ? !!val.length : false,
                         then: Yup.string().required(
-                            'Old password is required to set a new password',
+                            'Old password is required to set a new password'
                         ),
                     }),
                     password: Yup.string(),
                     password_confirmation: Yup.string().oneOf(
                         [Yup.ref('password'), null],
-                        'Password must match',
+                        'Password must match'
                     ),
                 });
                 await schema.validate(data, {
@@ -97,7 +97,7 @@ const Profile: React.FC = () => {
                 });
             }
         },
-        [addToast, history, updateUser],
+        [addToast, history, updateUser]
     );
 
     const handleAvatarChange = useCallback(
@@ -117,7 +117,7 @@ const Profile: React.FC = () => {
                 });
             }
         },
-        [addToast, updateUser],
+        [addToast, updateUser]
     );
 
     return (
