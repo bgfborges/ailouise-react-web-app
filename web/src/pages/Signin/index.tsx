@@ -24,7 +24,6 @@ const SignIn: React.FC = () => {
     const { addToast } = useToast();
     // eslint-disable-next-line @typescript-eslint/ban-types
     const handleSubmit = useCallback(
-        // eslint-disable-next-line @typescript-eslint/ban-types
         async (data: signInFormData) => {
             formRef.current?.setErrors({});
             try {

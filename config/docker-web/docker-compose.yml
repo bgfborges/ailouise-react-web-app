@@ -11,5 +11,6 @@ services:
     command: serve -s -p 3000 ./build
     restart: always
     volumes:
+      - ../../web:/usr/app/
       - ../../web/build:/usr/app/build
       - ../../web/node_modules:/usr/app/node_modules
