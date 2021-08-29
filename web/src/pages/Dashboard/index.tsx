@@ -45,16 +45,16 @@ const Dashboard: React.FC = () => {
         }
     }, []);
 
-    const handleMonthChange = useCallback((month) => {
+    const handleMonthChange = useCallback(month => {
         setCurrentMonth(month);
     }, []);
 
     const disabledDays = useMemo(() => {
         const dates = monthAvailability
-            .filter((monthDay) => {
+            .filter(monthDay => {
                 return monthDay.avaliable === false;
             })
-            .map((monthDay) => {
+            .map(monthDay => {
                 const year = currentMonth.getFullYear();
                 const month = currentMonth.getMonth();
                 return new Date(year, month, monthDay.day);
@@ -68,7 +68,7 @@ const Dashboard: React.FC = () => {
                 year: currentMonth.getFullYear(),
                 month: currentMonth.getMonth() + 1,
             },
-        }).then((response) => {
+        }).then(response => {
             setMonthAvailability(response.data);
         });
     }, [currentMonth, user.id]);
@@ -80,8 +80,8 @@ const Dashboard: React.FC = () => {
                 month: selectedDate.getMonth() + 1,
                 day: selectedDate.getDate(),
             },
-        }).then((response) => {
-            const appointmentFormatted = response.data.map((appointment) => {
+        }).then(response => {
+            const appointmentFormatted = response.data.map(appointment => {
                 return {
                     ...appointment,
                     hourFormatted: format(parseISO(appointment.date), 'HH:mm'),
@@ -100,20 +100,20 @@ const Dashboard: React.FC = () => {
     }, [selectedDate]);
 
     const morningAppointments = useMemo(() => {
-        return appointments.filter((appointment) => {
+        return appointments.filter(appointment => {
             return parseISO(appointment.date).getHours();
         });
     }, [appointments]);
 
     const afternoonAppointments = useMemo(() => {
-        return appointments.filter((appointment) => {
+        return appointments.filter(appointment => {
             return parseISO(appointment.date).getHours() >= 12;
         });
     }, [appointments]);
 
     const nextAppointment = useMemo(() => {
-        return appointments.find((appointment) =>
-            isAfter(parseISO(appointment.date), new Date())
+        return appointments.find(appointment =>
+            isAfter(parseISO(appointment.date), new Date()),
         );
     }, [appointments]);
 
@@ -150,7 +150,7 @@ const Dashboard: React.FC = () => {
                             <p>No appointments at morning! :)</p>
                         )}
 
-                        {morningAppointments.map((appointment) => (
+                        {morningAppointments.map(appointment => (
                             <Appointment key={appointment.id}>
                                 <span>
                                     <FiClock />
@@ -173,7 +173,7 @@ const Dashboard: React.FC = () => {
                             <p>No appointments at afernoon! :)</p>
                         )}
 
-                        {afternoonAppointments.map((appointment) => (
+                        {afternoonAppointments.map(appointment => (
                             <Appointment key={appointment.id}>
                                 <span>
                                     <FiClock />

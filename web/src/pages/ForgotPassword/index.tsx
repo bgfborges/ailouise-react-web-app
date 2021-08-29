@@ -67,7 +67,7 @@ const ForgotPassword: React.FC = () => {
                 setLoading(false);
             }
         },
-        [addToast]
+        [addToast],
     );
 
     return (

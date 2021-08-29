@@ -13,7 +13,7 @@ const GoogleButtonLogin: React.FC = () => {
     const { signIn } = useAuth();
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const responseGoogleSuccess = async (
-        response: GoogleLoginResponse | GoogleLoginResponseOffline
+        response: GoogleLoginResponse | GoogleLoginResponseOffline,
     ) => {
         if ('code' in response) {
             // const profile = response.getBasicProfile();

@@ -33,13 +33,13 @@ const DashBoardStructure: React.FC = ({ children }) => {
     const menuWrapper = document.getElementById('menuWrapper');
 
     const setMenuOff = useCallback(
-        (event) => {
+        event => {
             if (!menuWrapper?.contains(event.target)) {
                 setActiveMenu(false);
                 document.body.removeEventListener('click', setMenuOff, true);
             }
         },
-        [menuWrapper]
+        [menuWrapper],
     );
 
     useEffect(() => {

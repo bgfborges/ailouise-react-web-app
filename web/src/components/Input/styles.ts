@@ -25,7 +25,7 @@ export const Container = styled.div<ContainerProps>`
         cursor: pointer;
     }
 
-    ${(props) =>
+    ${props =>
         props.isErrored &&
         css`
             border-color: #ff6a71;
@@ -34,7 +34,7 @@ export const Container = styled.div<ContainerProps>`
             }
         `}
 
-    ${(props) =>
+    ${props =>
         props.isFocused &&
         css`
             border-color: #61ce70;
@@ -44,7 +44,7 @@ export const Container = styled.div<ContainerProps>`
             }
         `}
 
-    ${(props) =>
+    ${props =>
         props.isFilled &&
         css`
             border-color: #232129;

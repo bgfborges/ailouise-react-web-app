@@ -235,7 +235,7 @@ export const MenuWrapper = styled.div<ProfileStatus>`
         }
     }
 
-    ${(props) =>
+    ${props =>
         props.active &&
         css`
             & {

@@ -30,7 +30,7 @@ const ResetPassword: React.FC = () => {
                     password: Yup.string().min(6, 'Password is Required'),
                     password_confirmation: Yup.string().oneOf(
                         [Yup.ref('password'), null],
-                        'Password must match'
+                        'Password must match',
                     ),
                 });
 
@@ -75,7 +75,7 @@ const ResetPassword: React.FC = () => {
                 });
             }
         },
-        [addToast, history, location.search]
+        [addToast, history, location.search],
     );
 
     return (

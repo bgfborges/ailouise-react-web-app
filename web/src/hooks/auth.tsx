@@ -79,7 +79,7 @@ const AuthProvider: React.FC = ({ children }) => {
                 user,
             });
         },
-        [setData, data.token]
+        [setData, data.token],
     );
 
     return (
