@@ -20,7 +20,6 @@ const icons = {
     error: <IoMdAlert size={20} />,
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 const Toast: React.FC<MessageProps> = ({ message, style }) => {
     const { removeToast } = useToast();
 

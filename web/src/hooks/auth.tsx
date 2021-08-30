@@ -45,9 +45,15 @@ const AuthProvider: React.FC = ({ children }) => {
             const response = await api.post('sessions/auth/google', {
                 code,
             });
-            const { token, user } = response.data;
+
+            const { token, user, is_new_user } = response.data;
+
             localStorage.setItem('@aiLouise:token', token);
             localStorage.setItem('@aiLouise:user', JSON.stringify(user));
+
+            if (is_new_user) {
+                localStorage.setItem('@aiLouise:googleCalendar', 'pending');
+            }
 
             setData({ token, user });
             return;

@@ -14,6 +14,7 @@ import {
     Session,
     Appointment,
 } from './styles';
+import FullPopUp from '../../components/FullPopUp';
 
 interface MonthAvailabilityItem {
     day: number;
@@ -119,6 +120,7 @@ const Dashboard: React.FC = () => {
 
     return (
         <DashBoardStructure>
+            <FullPopUp />
             <Content>
                 <Schedule>
                     <h1>Scheduled Appointments</h1>

@@ -55,7 +55,7 @@ export const SidebarHeaderContent = styled.div`
                 margin: 20px 0;
                 padding: 10px 20px;
                 list-style-type: none;
-                transition: background 100ms, color 100ms;
+                transition: border-radius 1s, background 100ms, color 100ms;
                 border-radius: 20px;
                 cursor: pointer;
                 display: flex;
@@ -67,12 +67,14 @@ export const SidebarHeaderContent = styled.div`
                     display: flex;
                     align-items: center;
                     width: 40px;
+
                     svg {
                         font-size: 20px;
                     }
                 }
 
                 &:hover {
+                    border-radius: 0px;
                     background: white;
                     color: #8176ff;
                 }
