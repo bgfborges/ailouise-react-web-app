@@ -90,8 +90,8 @@ const PopUpContent: React.FC<IPopUpContent> = ({ nextFunc }) => {
             <PopUpCalendars>
                 <section>
                     <FiCalendar />
-                    <h3>Set Your Calendars Now</h3>
-                    <p>Premium for free</p>
+                    <h3>Welcome to aiLouise</h3>
+                    <p>Freemium for While</p>
                     <button type="button" onClick={nextFunc}>
                         Next
                     </button>
@@ -100,8 +100,8 @@ const PopUpContent: React.FC<IPopUpContent> = ({ nextFunc }) => {
             <PopUpCalendars>
                 <section>
                     <FiCalendar />
-                    <h3>Connect with Google</h3>
-                    <p>The Powerful of Google Calendars</p>
+                    <h3>Manage as a PRO</h3>
+                    <p>All you need as a CTO</p>
                     <div>
                         <button type="button" onClick={nextFunc}>
                             Next
@@ -112,8 +112,8 @@ const PopUpContent: React.FC<IPopUpContent> = ({ nextFunc }) => {
             <PopUpCalendars>
                 <section>
                     <FiCalendar />
-                    <h3>Connect with Apple</h3>
-                    <p>The Calendars of Your Apple</p>
+                    <h3>The best for your Client</h3>
+                    <p>Offer the Best with Lowest Costs</p>
                     <div>
                         <button type="button" onClick={nextFunc}>
                             Next
@@ -125,7 +125,7 @@ const PopUpContent: React.FC<IPopUpContent> = ({ nextFunc }) => {
                 <section>
                     <FiCalendar />
                     <h3>Choose Calendars from Google</h3>
-                    <p>Sync with Gmail</p>
+                    <p>Sync with the Power of Gmail</p>
                     <Calendars selected={selected}>
                         <div>{calendarsAppend}</div>
                     </Calendars>
