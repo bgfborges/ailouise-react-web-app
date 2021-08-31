@@ -48,7 +48,7 @@ export const PopUpContainer = styled.div<IPopUpContainer>`
             display: none;
         `}
 
-    > div {
+    > div:nth-child(1) {
         width: 60vw;
         height: 70vh;
         position: sticky;
@@ -62,7 +62,6 @@ export const PopUpContainer = styled.div<IPopUpContainer>`
         display: flex;
 
         svg {
-            color: #8176ff;
             font-size: 40px;
             margin-bottom: 20px;
         }

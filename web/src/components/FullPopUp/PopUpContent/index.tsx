@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { FiCalendar } from 'react-icons/fi';
-import { BsFillCalendarFill } from 'react-icons/bs';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import api from '../../../services/api';
 import {
@@ -8,7 +7,6 @@ import {
     Calendars,
     CalendarItem,
     CalendarTitle,
-    CalendarContent,
 } from './styles';
 import { useAuth } from '../../../hooks/auth';
 
@@ -32,11 +30,12 @@ interface ICalendarJson {
 
 const PopUpContent: React.FC<IPopUpContent> = ({ nextFunc }) => {
     const [calendars, setCalendars] = useState<ICalendar[]>([]);
+    const [selected, setSelected] = useState<string[]>([]);
     const { user } = useAuth();
 
     useEffect(() => {
-        api.get(`/calendars/google/${user.id}/`, {}).then(response => {
-            setCalendars(response.data);
+        api.get(`calendars/${user.id}/google/`).then(response => {
+            setCalendars(response.data.calendars);
         });
     }, [user.id]);
 
@@ -44,32 +43,21 @@ const PopUpContent: React.FC<IPopUpContent> = ({ nextFunc }) => {
         (e): ICalendarJson => {
             const calendarClicked = e.currentTarget.dataset.index;
 
-            const selectedCalendar = {
-                id: calendarClicked,
-                gid: calendarClicked,
-                color: 'red',
-                summary: 'My Client Callendar',
-            };
-
-            const returnValue = calendars.find(
-                item => item.gid === calendarClicked,
-            );
+            const returnValue = selected.find(item => item === calendarClicked);
             if (!returnValue) {
-                setCalendars([...calendars, selectedCalendar]);
+                setSelected([...selected, calendarClicked]);
                 return {
-                    calendar: selectedCalendar,
+                    calendar: calendarClicked,
                     action: 'update',
                 };
             }
-            setCalendars(
-                calendars.filter(item => item.gid !== calendarClicked),
-            );
+            setSelected(selected.filter(item => item !== calendarClicked));
             return {
-                calendar: selectedCalendar,
+                calendar: calendarClicked,
                 action: 'exclude',
             };
         },
-        [calendars],
+        [selected],
     );
 
     useEffect(() => {
@@ -78,88 +66,73 @@ const PopUpContent: React.FC<IPopUpContent> = ({ nextFunc }) => {
         });
     }, [selectCalendar]);
 
-    const selectedCalendars = useCallback(() => {
-        const selected = calendars.map(item => item.gid);
-        return selected;
-    }, [calendars]);
+    const calendarsAppend = calendars.map(item => (
+        <CalendarItem
+            key={item.gid}
+            data-index={item.gid}
+            onClick={selectCalendar}
+        >
+            <CalendarTitle>
+                <div>
+                    <div>
+                        <AiFillCheckCircle />
+                    </div>
+                    <div>
+                        <h3>{item.summary}</h3>
+                    </div>
+                </div>
+            </CalendarTitle>
+        </CalendarItem>
+    ));
 
     return (
         <>
             <PopUpCalendars>
-                <FiCalendar />
-                <h3>Set Your Calendars Now</h3>
-                <p>Premium for free</p>
-                <button type="button" onClick={nextFunc}>
-                    Next
-                </button>
-            </PopUpCalendars>
-            <PopUpCalendars>
-                <FiCalendar />
-                <h3>Connect with Google</h3>
-                <p>The Powerful of Google Calendars</p>
-                <div>
+                <section>
+                    <FiCalendar />
+                    <h3>Set Your Calendars Now</h3>
+                    <p>Premium for free</p>
                     <button type="button" onClick={nextFunc}>
                         Next
                     </button>
-                </div>
+                </section>
             </PopUpCalendars>
             <PopUpCalendars>
-                <FiCalendar />
-                <h3>Connect with Apple</h3>
-                <p>The Calendars of Your Apple</p>
-                <div>
-                    <button type="button" onClick={nextFunc}>
-                        Next
-                    </button>
-                </div>
+                <section>
+                    <FiCalendar />
+                    <h3>Connect with Google</h3>
+                    <p>The Powerful of Google Calendars</p>
+                    <div>
+                        <button type="button" onClick={nextFunc}>
+                            Next
+                        </button>
+                    </div>
+                </section>
             </PopUpCalendars>
             <PopUpCalendars>
-                <h3>Choose from Google</h3>
-                <hr />
-                <Calendars selected={selectedCalendars()}>
-                    <CalendarItem
-                        key={1}
-                        data-index={1}
-                        onClick={selectCalendar}
-                    >
-                        <CalendarTitle>
-                            <AiFillCheckCircle />
-                            <h3>Meetings with Clients</h3>
-                        </CalendarTitle>
-                        <CalendarContent>
-                            <BsFillCalendarFill />
-                        </CalendarContent>
-                    </CalendarItem>
-                    <CalendarItem
-                        key={2}
-                        data-index={2}
-                        onClick={selectCalendar}
-                    >
-                        <CalendarTitle>
-                            <AiFillCheckCircle />
-                            <h3>Meetings with Clients</h3>
-                        </CalendarTitle>
-                        <CalendarContent>
-                            <BsFillCalendarFill />
-                        </CalendarContent>
-                    </CalendarItem>
-                    <CalendarItem
-                        key={3}
-                        data-index={3}
-                        onClick={selectCalendar}
-                    >
-                        <CalendarTitle>
-                            <AiFillCheckCircle />
-                            <h3>Meetings with Clients</h3>
-                        </CalendarTitle>
-                        <CalendarContent>
-                            <BsFillCalendarFill />
-                        </CalendarContent>
-                    </CalendarItem>
-                </Calendars>
-                <div>
-                    <button type="button">Update</button>
-                </div>
+                <section>
+                    <FiCalendar />
+                    <h3>Connect with Apple</h3>
+                    <p>The Calendars of Your Apple</p>
+                    <div>
+                        <button type="button" onClick={nextFunc}>
+                            Next
+                        </button>
+                    </div>
+                </section>
+            </PopUpCalendars>
+            <PopUpCalendars>
+                <section>
+                    <FiCalendar />
+                    <h3>Choose Calendars from Google</h3>
+                    <p>Sync with Gmail</p>
+                    <Calendars selected={selected}>
+                        <div>{calendarsAppend}</div>
+                    </Calendars>
+                    <div>
+                        <button type="button">Finish</button>
+                    </div>
+                </section>
             </PopUpCalendars>
         </>
     );
