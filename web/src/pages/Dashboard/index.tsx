@@ -102,7 +102,7 @@ const Dashboard: React.FC = () => {
 
     const morningAppointments = useMemo(() => {
         return appointments.filter(appointment => {
-            return parseISO(appointment.date).getHours();
+            return parseISO(appointment.date).getHours() <= 11;
         });
     }, [appointments]);
 
@@ -120,7 +120,7 @@ const Dashboard: React.FC = () => {
 
     return (
         <DashBoardStructure>
-            <FullPopUp />
+            {localStorage.getItem('@aiLouise:googleCalendar') && <FullPopUp />}
             <Content>
                 <Schedule>
                     <h1>Scheduled Appointments</h1>
@@ -208,7 +208,7 @@ const Dashboard: React.FC = () => {
                             onDayClick={handleDateChange}
                         />
 
-                        <button type="button">Past Meetings</button>
+                        <button type="button">New Appointment</button>
                     </div>
                 </Calendar>
             </Content>

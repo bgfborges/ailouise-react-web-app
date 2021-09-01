@@ -25,6 +25,7 @@ import {
 } from './styles';
 import logo from '../../assets/ailouise.png';
 import { useAuth } from '../../hooks/auth';
+import ChatLouise from '../../components/ChatLouise';
 
 const DashBoardStructure: React.FC = ({ children }) => {
     const { signOut, user } = useAuth();
@@ -63,6 +64,7 @@ const DashBoardStructure: React.FC = ({ children }) => {
 
     return (
         <Container>
+            <ChatLouise />
             <SideBar>
                 <SidebarHeaderContent>
                     <span>
@@ -80,7 +82,7 @@ const DashBoardStructure: React.FC = ({ children }) => {
                                 <div>
                                     <MdScreenShare />
                                 </div>
-                                Schedule
+                                Team
                             </li>
                             <li>
                                 <div>
@@ -92,7 +94,7 @@ const DashBoardStructure: React.FC = ({ children }) => {
                                 <div>
                                     <BsFillPeopleFill />
                                 </div>
-                                Providers
+                                Projetcs
                             </li>
                             <li>
                                 <div>

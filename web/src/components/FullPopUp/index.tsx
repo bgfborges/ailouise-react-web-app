@@ -25,6 +25,11 @@ const FullPopUp: React.FC = () => {
         });
     }, [content.index, content.contents]);
 
+    const closePopup = useCallback((): void => {
+        nextContent();
+        localStorage.removeItem('@aiLouise:googleCalendar');
+    }, [nextContent]);
+
     const backContent = useCallback((): void => {
         if (content.index >= content.contents) {
             setContent({
@@ -54,6 +59,7 @@ const FullPopUp: React.FC = () => {
                         index={content.index}
                         nextFunc={nextContent}
                         backFunc={backContent}
+                        finishFunc={closePopup}
                     />
                 </main>
                 <PopUpSliderBullets index={content.index}>

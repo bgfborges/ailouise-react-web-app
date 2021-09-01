@@ -14,6 +14,7 @@ interface IPopUpContent {
     index: number;
     nextFunc?: () => void;
     backFunc?: () => void;
+    finishFunc?: () => void;
 }
 
 interface ICalendar {
@@ -24,17 +25,17 @@ interface ICalendar {
 }
 
 interface ICalendarJson {
-    calendar: ICalendar;
-    action: 'update' | 'exclude';
+    calendar: ICalendar[];
+    action: 'insert' | 'exclude';
 }
 
-const PopUpContent: React.FC<IPopUpContent> = ({ nextFunc }) => {
+const PopUpContent: React.FC<IPopUpContent> = ({ nextFunc, finishFunc }) => {
     const [calendars, setCalendars] = useState<ICalendar[]>([]);
     const [selected, setSelected] = useState<string[]>([]);
     const { user } = useAuth();
 
     useEffect(() => {
-        api.get(`calendars/${user.id}/google/`).then(response => {
+        api.get(`calendars/google/`).then(response => {
             setCalendars(response.data.calendars);
         });
     }, [user.id]);
@@ -46,25 +47,26 @@ const PopUpContent: React.FC<IPopUpContent> = ({ nextFunc }) => {
             const returnValue = selected.find(item => item === calendarClicked);
             if (!returnValue) {
                 setSelected([...selected, calendarClicked]);
+
+                api.post('calendars/google/new', {
+                    calendar: calendarClicked,
+                    action: 'insert',
+                });
                 return {
                     calendar: calendarClicked,
-                    action: 'update',
+                    action: 'insert',
                 };
             }
             setSelected(selected.filter(item => item !== calendarClicked));
             return {
-                calendar: calendarClicked,
+                calendar: calendars.filter(
+                    item => item.gid === calendarClicked,
+                ),
                 action: 'exclude',
             };
         },
-        [selected],
+        [selected, calendars],
     );
-
-    useEffect(() => {
-        api.post('/', {
-            selectCalendar,
-        });
-    }, [selectCalendar]);
 
     const calendarsAppend = calendars.map(item => (
         <CalendarItem
@@ -130,7 +132,9 @@ const PopUpContent: React.FC<IPopUpContent> = ({ nextFunc }) => {
                         <div>{calendarsAppend}</div>
                     </Calendars>
                     <div>
-                        <button type="button">Finish</button>
+                        <button type="button" onClick={finishFunc}>
+                            Finish
+                        </button>
                     </div>
                 </section>
             </PopUpCalendars>
