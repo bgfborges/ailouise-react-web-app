@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FiSend } from 'react-icons/fi';
+import { AiFillCaretDown } from 'react-icons/ai';
+import { BsCameraVideoFill } from 'react-icons/bs';
 import { CalendarContainer, ChatItemLouise, MessItem } from './styles';
 import avatar from '../../assets/avatar.png';
 import api from '../../services/api';
@@ -15,16 +17,9 @@ const ChatLouise: React.FC = () => {
         {
             origin: 'lu',
             content:
-                'Hey, Louise aqui! Sua IA favorita 💖 O que vamos construir hoje?',
+                'Ai, Louise aqui! Sua IA favorita 💖 O que vamos construir hoje?',
         },
     ]);
-    // const [message, setMessage] = useState<IMessage[]>([
-    //     {
-    //         origin: 'lu',
-    //         content:
-    //             'Hey, Louise aqui! Sua IA favorita 💖 O que vamos construir hoje?',
-    //     },
-    // ]);
     const [value, setValue] = useState<string>();
 
     const openChat = useCallback(() => {
@@ -33,6 +28,7 @@ const ChatLouise: React.FC = () => {
 
     const messageFormRef = useRef<HTMLFormElement | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+    const messageListRef = useRef<HTMLUListElement | null>(null);
 
     const textAreaChange = (
         event: React.ChangeEvent<HTMLTextAreaElement>,
@@ -48,20 +44,43 @@ const ChatLouise: React.FC = () => {
         }
     }, [value]);
 
-    try {
-        useEffect(() => {
-            api.get('/messages/lu/me').then(response => {
-                const messages = response.data.map((mss: IMessage) => ({
-                    origin: 'user',
-                    content: mss.content,
-                }));
-                setMessage([...message, ...messages]);
+    useEffect(() => {
+        api.get('/messages/lu/me').then(response => {
+            const messages = response.data.map((mss: IMessage) => ({
+                origin: mss.origin,
+                content: mss.content,
+            }));
+            setMessage([...message, ...messages]);
+        });
+        // Eslint doesn't permit me to put this [] without the dependencies that will be applied
+        // As long I could take it off, it wouldn't work because I need to put this [] then he fire only once
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const sendPostUpdateGetAnswer = useCallback(async content => {
+        const answerLuMessages = await api.post('messages/lu/new', {
+            text: content,
+        });
+        if (answerLuMessages.data instanceof Array) {
+            const appendAnswers = answerLuMessages.data.map(
+                (item: IMessage) => ({
+                    content: item.content,
+                    origin: item.origin,
+                }),
+            );
+            setMessage(oldVal => [...oldVal, ...appendAnswers]);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (messageListRef.current) {
+            messageListRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',
+                inline: 'end',
             });
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, []);
-    } catch {
-        throw new Error('Internal Server Error');
-    }
+        }
+    }, [message]);
 
     const sendMessage = useCallback(
         async e => {
@@ -70,18 +89,16 @@ const ChatLouise: React.FC = () => {
             if (!content && content === '') {
                 return;
             }
-            await api.post('messages/lu/new', {
-                text: content,
-            });
             const newMessage = {
                 content,
                 origin: 'user',
             };
             setMessage([...message, newMessage]);
+            await sendPostUpdateGetAnswer(content);
             e.target.reset();
             content = '';
         },
-        [message],
+        [message, sendPostUpdateGetAnswer],
     );
 
     return (
@@ -92,11 +109,21 @@ const ChatLouise: React.FC = () => {
                 </button>
                 <main>
                     <button type="button" onClick={openChat}>
-                        <img src={avatar} alt="Louise Profile Avatar" />
-                        <h4>Louise</h4>
+                        <div>
+                            <img src={avatar} alt="Louise Profile Avatar" />
+                            <h4>Louise</h4>
+                        </div>
+                        <div>
+                            <div>
+                                <BsCameraVideoFill />
+                            </div>
+                            <div>
+                                <AiFillCaretDown />
+                            </div>
+                        </div>
                     </button>
                     <div>
-                        <ul>
+                        <ul ref={messageListRef}>
                             {message.map(mess => (
                                 <MessItem
                                     origin={mess.origin}
@@ -107,6 +134,7 @@ const ChatLouise: React.FC = () => {
                                     <div>{mess.content}</div>
                                 </MessItem>
                             ))}
+                            <span />
                         </ul>
                     </div>
                     <footer>

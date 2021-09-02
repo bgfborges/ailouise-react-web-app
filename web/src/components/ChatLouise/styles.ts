@@ -75,17 +75,72 @@ export const ChatItemLouise = styled.div<isOpen>`
             color: white;
             border-radius: 6px 6px 0px 0px;
 
-            img {
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                object-fit: cover;
-                margin-right: 10px;
+            div:nth-child(1) {
+                flex: 1;
+                display: flex;
+                flex-direction: row;
+                justify-content: start;
+                align-items: center;
+                img {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    margin-right: 10px;
+                    border: 2px solid #61ce70;
+                }
+
+                h4 {
+                    font-weight: 700;
+                    font-size: 13px;
+                }
             }
 
-            h4 {
-                font-weight: 700;
-                font-size: 13px;
+            div:nth-child(2) {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                > div {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 5px;
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                    margin: 0 5px;
+                    transition: background 100ms;
+
+                    svg {
+                        font-size: 16px;
+                        font-weight: 700;
+                        color: #f5f5f5;
+                        transition: color 100ms;
+                    }
+
+                    &:hover {
+                        background: #ffffff2f;
+                        svg {
+                            color: #fff;
+                        }
+                    }
+                }
+            }
+        }
+
+        > div {
+            flex: 1;
+            overflow-x: scroll;
+            margin-bottom: 20px;
+
+            ul {
+                list-style-type: none;
+                padding: 20px;
+                font-size: 12px;
+                font-weight: 600;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
             }
         }
 

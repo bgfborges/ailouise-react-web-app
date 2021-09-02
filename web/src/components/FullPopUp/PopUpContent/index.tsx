@@ -8,7 +8,6 @@ import {
     CalendarItem,
     CalendarTitle,
 } from './styles';
-import { useAuth } from '../../../hooks/auth';
 
 interface IPopUpContent {
     index: number;
@@ -32,13 +31,12 @@ interface ICalendarJson {
 const PopUpContent: React.FC<IPopUpContent> = ({ nextFunc, finishFunc }) => {
     const [calendars, setCalendars] = useState<ICalendar[]>([]);
     const [selected, setSelected] = useState<string[]>([]);
-    const { user } = useAuth();
 
     useEffect(() => {
-        api.get(`calendars/google/`).then(response => {
+        api.get('calendars/google/').then(response => {
             setCalendars(response.data.calendars);
         });
-    }, [user.id]);
+    });
 
     const selectCalendar = useCallback(
         (e): ICalendarJson => {

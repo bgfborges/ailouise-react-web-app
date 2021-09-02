@@ -66,9 +66,9 @@ const AuthProvider: React.FC = ({ children }) => {
         localStorage.setItem('@aiLouise:token', token);
         localStorage.setItem('@aiLouise:user', JSON.stringify(user));
 
-        api.defaults.headers.authorization = `Bearer ${token}`;
-
         setData({ token, user });
+
+        api.defaults.headers.authorization = `Bearer ${token}`;
     }, []);
 
     const signOut = useCallback(() => {
