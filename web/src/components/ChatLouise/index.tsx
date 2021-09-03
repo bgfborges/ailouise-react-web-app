@@ -5,10 +5,12 @@ import { BsCameraVideoFill } from 'react-icons/bs';
 import { CalendarContainer, ChatItemLouise, MessItem } from './styles';
 import avatar from '../../assets/avatar.png';
 import api from '../../services/api';
+import PopUpPresentation from './PopUpPresentation';
 
 interface IMessage {
     origin: string;
     content: string;
+    action?: string;
 }
 
 const ChatLouise: React.FC = () => {
@@ -21,6 +23,7 @@ const ChatLouise: React.FC = () => {
         },
     ]);
     const [value, setValue] = useState<string>();
+    const [showPresentation, setShowPresentation] = useState<boolean>(false);
 
     const openChat = useCallback(() => {
         setOpen(!open);
@@ -69,18 +72,16 @@ const ChatLouise: React.FC = () => {
                 }),
             );
             setMessage(oldVal => [...oldVal, ...appendAnswers]);
+
+            const isAction = answerLuMessages.data.find(
+                (item: IMessage) => item.action === 'presentation',
+            );
+
+            if (isAction) {
+                setShowPresentation(true);
+            }
         }
     }, []);
-
-    useEffect(() => {
-        if (messageListRef.current) {
-            messageListRef.current.scrollIntoView({
-                behavior: 'smooth',
-                block: 'end',
-                inline: 'end',
-            });
-        }
-    }, [message]);
 
     const sendMessage = useCallback(
         async e => {
@@ -94,15 +95,26 @@ const ChatLouise: React.FC = () => {
                 origin: 'user',
             };
             setMessage([...message, newMessage]);
-            await sendPostUpdateGetAnswer(content);
             e.target.reset();
+            await sendPostUpdateGetAnswer(content);
             content = '';
         },
         [message, sendPostUpdateGetAnswer],
     );
 
+    useEffect(() => {
+        if (messageListRef.current) {
+            messageListRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',
+                inline: 'end',
+            });
+        }
+    }, [message]);
+
     return (
         <CalendarContainer>
+            <PopUpPresentation isChat={open} display={showPresentation} />
             <ChatItemLouise active={open}>
                 <button type="button" onClick={openChat}>
                     <img src={avatar} alt="Louise Profile Avatar" />
