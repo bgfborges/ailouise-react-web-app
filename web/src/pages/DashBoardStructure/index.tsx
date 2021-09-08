@@ -33,6 +33,10 @@ const DashBoardStructure: React.FC = ({ children }) => {
     const { addToast } = useToast();
     const menuWrapper = document.getElementById('menuWrapper');
 
+    const toggleMenu = useCallback(() => {
+        setActiveMenu(!activeMenu);
+    }, [activeMenu]);
+
     const setMenuOff = useCallback(
         event => {
             if (!menuWrapper?.contains(event.target)) {
@@ -48,10 +52,6 @@ const DashBoardStructure: React.FC = ({ children }) => {
             document.body.addEventListener('click', setMenuOff, true);
         }
     }, [setMenuOff, menuWrapper, activeMenu]);
-
-    const toggleMenu = useCallback(() => {
-        setActiveMenu(!activeMenu);
-    }, [activeMenu]);
 
     const toastSignOut = useCallback(() => {
         signOut();
@@ -80,6 +80,12 @@ const DashBoardStructure: React.FC = ({ children }) => {
                             </li>
                             <li>
                                 <div>
+                                    <BsFillPeopleFill />
+                                </div>
+                                Projetcs
+                            </li>
+                            <li>
+                                <div>
                                     <MdScreenShare />
                                 </div>
                                 Team
@@ -89,12 +95,6 @@ const DashBoardStructure: React.FC = ({ children }) => {
                                     <RiTodoFill />
                                 </div>
                                 ToDos
-                            </li>
-                            <li>
-                                <div>
-                                    <BsFillPeopleFill />
-                                </div>
-                                Projetcs
                             </li>
                             <li>
                                 <div>

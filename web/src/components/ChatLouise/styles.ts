@@ -90,9 +90,20 @@ export const ChatItemLouise = styled.div<isOpen>`
                     border: 2px solid #61ce70;
                 }
 
-                h4 {
-                    font-weight: 700;
-                    font-size: 13px;
+                > div {
+                    display: flex;
+                    flex-direction: column;
+
+                    h4 {
+                        font-weight: 700;
+                        font-size: 13px;
+                        margin-left: -9px;
+                    }
+
+                    p {
+                        font-size: 9px;
+                        font-weight: 600;
+                    }
                 }
             }
 

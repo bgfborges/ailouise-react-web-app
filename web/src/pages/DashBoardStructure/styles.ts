@@ -194,6 +194,7 @@ export const MenuWrapper = styled.div<ProfileStatus>`
     z-index: 1000;
     border-radius: 8px;
     visibility: hidden;
+    display: none;
 
     &::before {
         content: '';
@@ -241,6 +242,7 @@ export const MenuWrapper = styled.div<ProfileStatus>`
         props.active &&
         css`
             & {
+                display: block;
                 visibility: visible;
             }
         `}

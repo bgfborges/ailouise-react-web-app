@@ -103,6 +103,11 @@ export const PopUpContent = styled.div`
     }
 
     > div:nth-child(2) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
         input {
             border: none;
             background-image: none;

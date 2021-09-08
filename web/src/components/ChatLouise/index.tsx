@@ -14,7 +14,7 @@ interface IMessage {
 }
 
 const ChatLouise: React.FC = () => {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState<boolean>(false);
     const [message, setMessage] = useState<IMessage[]>([
         {
             origin: 'lu',
@@ -71,6 +71,7 @@ const ChatLouise: React.FC = () => {
                     origin: item.origin,
                 }),
             );
+
             setMessage(oldVal => [...oldVal, ...appendAnswers]);
 
             const isAction = answerLuMessages.data.find(
@@ -114,7 +115,11 @@ const ChatLouise: React.FC = () => {
 
     return (
         <CalendarContainer>
-            <PopUpPresentation isChat={open} display={showPresentation} />
+            <PopUpPresentation
+                isChat={open}
+                display={showPresentation}
+                setMessage={setMessage}
+            />
             <ChatItemLouise active={open}>
                 <button type="button" onClick={openChat}>
                     <img src={avatar} alt="Louise Profile Avatar" />
@@ -123,7 +128,10 @@ const ChatLouise: React.FC = () => {
                     <button type="button" onClick={openChat}>
                         <div>
                             <img src={avatar} alt="Louise Profile Avatar" />
-                            <h4>Louise</h4>
+                            <div>
+                                <h4>Louise</h4>
+                                <p>Active Now</p>
+                            </div>
                         </div>
                         <div>
                             <div>
